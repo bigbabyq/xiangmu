@@ -1,0 +1,64 @@
+            *{
+				padding:0;
+				margin:0;
+			}
+			.biggest{
+				height:auto;
+				margin:3px;
+			}
+			.top{
+				height:50px;
+				background-color: #dfedff;
+				border: 1.5px solid black;
+				margin:3px;
+			}
+			.bottom{
+				height: 937px;
+				border:1.5px solid black;
+				margin:3px;
+			}
+			p{
+				padding-left:20px;
+				font-family:"华文行楷";
+				font-size:23px;
+				line-height:50px;
+			}
+			.left{
+				margin:3px;
+			}
+			ul {
+				list-style-type: none;
+				float: left;
+				width: 150px;
+				text-align: center;
+				background-color: #dfedff;
+			}
+			li{
+				display: block;
+				height: 30px;
+				line-height: 30px;
+				border: 1px solid gray;
+			}
+			a{
+				display: block;
+				text-decoration: none;
+				color: black;
+			}
+			.active{
+				background-color: #ae1c1c;
+			}
+			a:hover:not(.active){
+				color:white;
+				background-color: skyblue;
+			}
+			.right{
+				float:right;
+				width:1200px;
+				margin-right:3px;
+				height:930px;
+				border:1px solid gray;
+				background-color:#dfedff ;
+			}
+			h2{
+				line-height: 50px;
+			}
