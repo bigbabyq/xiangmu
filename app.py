@@ -1,83 +1,43 @@
-from dataclasses import dataclass
-from flask import Flask
-from flask import request, render_template, redirect, url_for, session, g
+import pymysql
+from flask import Flask, render_template
+from data import get_loan_number
 
-app = Flask(__name__, static_url_path="/")
-app.config['SECRET_KEY'] = "sdfklas0lk42j"
+def get_loan_number():
+    db = pymysql.Connect(
+        host='localhost',
+        port=3306,
+        user="root",
+        passwd="hq261328",
+        db="超市仓储管理信息系统",
+        charset='utf8'
+    )
+    print("---读取数据---")
+    cursor = db.cursor()  # 使用连接对象获得一个cursor对象
+    sql = "select mingcheng,shuliang  from chanpinziliao"
+    cursor.execute(sql)  # 用于执行返回多个结果集、多个更新计数或二者组合的语句。
+    number = cursor.fetchall()  # 返回多个元组，即返回多个记录(rows),如果没有结果 则返回 ()
+    temp_data = []
+    loan_count = 0
+    for loanNumber in number:
+        loan_count += 1
+        temp_data.append(loanNumber)
+    data11 = dict(temp_data)
+    # print(data11)
+    cursor.close()
+    db.close()
+    print("读取完成,共有%d条数据……" % loan_count)
+    return data11
 
+# 引入核心模块
 
-@dataclass
-class User:
-    id: int
-    username: str
-    password: str
+# 通过当前文件构建一个app应用，当前文件就是web和App的入口
+app = Flask(__name__)
 
+# 定义视图处理函数加载到App中（路由+视图函数）
+@app.route('/') # 访问路由
+def hello_world(): # 绑定的视图函数
+    temp_data = get_loan_number()
+    return render_template('bar-simple.html',map_data=temp_data)
 
-users1 = [
-    User(1, "Admin", "123456"),
-]
-users2 = [
-
-    User(1, "Eason", "888888"),
-
-]
-
-
-@app.before_request
-def before_request():
-    g.user = None
-    if 'user_id' in session:
-        user1 = [u for u in users1 if u.id == session['user_id']][0]
-        user2 = [u for u in users2 if u.id == session['user_id']][0]
-        g.user1 = user1
-        g.user2 = user2
-
-
-@app.route("/", methods=['GET', 'POST'])
-def login():
-    if request.method == 'POST':
-        # 登录操作
-        session.pop('user_id', None)
-        username = request.form.get("username", None)
-        password = request.form.get("password", None)
-        user1 = [u for u in users1 if u.username == username]
-        if len(user1) > 0:
-            user = user1[0]
-        if user1 and user.password == password:
-            session['user_id'] = user.id
-            return redirect(url_for('profile1'))
-
-    if request.method == 'POST':
-        # 登录操作
-        session.pop('user_id', None)
-        username = request.form.get("username", None)
-        password = request.form.get("password", None)
-        user2 = [u for u in users2 if u.username == username]
-        if len(user2) > 0:
-            user = user2[0]
-        if user2 and user.password == password:
-            session['user_id'] = user.id
-            return redirect(url_for('profile2'))
-
-    return render_template("login.html")
-
-
-@app.route("/profile1")
-def profile1():
-    if not g.user1:
-        return redirect(url_for('login'))
-
-    return render_template("1.html")
-
-@app.route("/profile2")
-def profile2():
-    if not g.user2:
-        return redirect(url_for('login'))
-
-    return render_template("2.html")
-
-
-@app.route("/logout")
-def logout():
-    session.pop("user_id", None)
-    return redirect(url_for('login'))
+if __name__ == '__main__':
+    app.run()
