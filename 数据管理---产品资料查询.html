@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="../static/通用.css">
+    <link rel="stylesheet" href="../static/表格样式.css">
+    <script type="text/javascript" src="../static/js.js"></script>
+    <script type="text/javascript">
+        $(function(){
+            //隐藏所有的标题
+           $(".nav-menu").each(function () {
+               $(this).children(".nav-content").hide();
+           });
+           //给主标题保持时间
+           $(".nav-title").each(function () {
+               $(this).click(function () {
+                   var navConEle = $(this).parents(".nav-menu").children(".nav-content");
+                   //判断
+                   if(navConEle.css("display")!="none"){
+                       //隐藏
+                       navConEle.hide(250);
+                   }else{
+                       //展示
+                       navConEle.show(250);
+                   }
+               });
+           });
+        });
+    </script>
+</head>
+<body>
+<div class="content">
+    <div class="top-title">
+        <p>超市仓储管理信息系统</p>
+        <span>
+            欢迎： {{g.user.username}}&nbsp;&nbsp;&nbsp;&nbsp;
+            <a href="{{url_for('logout')}}">退出登录</a><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href=""> 返回主页面</a>
+        </span>
+    </div>
+    <div class="content-left">
+        <!--分割线-->
+       <div class="seg"></div>
+        <div class="nav">
+            <!--每一个菜单栏样式 1-->
+            <div class="nav-menu">
+                <!--主标题-->
+                <div class="nav-title">入库管理</div>
+                 <!--子标题-->
+                <div class="nav-content">
+                    <a href="rukudan">生成入库单</a>
+                    <a href="ru_biangeng">货物信息变更</a>
+                </div>
+            </div>
+
+            <!--每一个菜单栏样式2-->
+            <div class="nav-menu">
+                <!--主标题-->
+                <div class="nav-title">在库管理</div>
+                 <!--子标题-->
+                <div class="nav-content">
+                    <a href="pandiandan">生成盘点单</a>
+                    <a href="quehuodan">生成缺货单</a>
+                    <a href="yujing">安全库存预警</a>
+                </div>
+            </div>
+
+            <!--每一个菜单栏样式-->
+            <div class="nav-menu">
+                <!--主标题-->
+                <div class="nav-title">出库管理</div>
+                 <!--子标题-->
+                <div class="nav-content">
+                    <a href="buhuodan">生成补货单</a>
+                    <a href="chukudan">生成出库单</a>
+                    <a href="chu_biangeng">货物信息变更</a>
+                </div>
+            </div>
+
+            <!--每一个菜单栏样式-->
+            <div class="nav-menu">
+                <!--主标题-->
+                <div class="nav-title">基础资料</div>
+                 <!--子标题-->
+                <div class="nav-content">
+                    <a href="gongyingshang">供应商资料</a>
+                    <a href="yuangong">员工信息</a>
+                    <a href="shepinbiaoqian">射频标签</a>
+                    <a href="cangku">仓库信息</a>
+                    <a href="shebei">设备管理</a>
+                </div>
+            </div>
+
+            <!--每一个菜单栏样式-->
+            <div class="nav-menu">
+                <!--主标题-->
+                <div class="nav-title">数据管理</div>
+                 <!--子标题-->
+                <div class="nav-content">
+                    <a href="rukuchaxun">入库单查询</a>
+                    <a href="chukuchaxun">出库单查询</a>
+                    <a href="chanpinchaxun">产品资料查询</a>
+                    <a href="keshihua">属性数据可视化</a>
+                </div>
+            </div>
+        </div>
+        <div class="seg"></div>
+    </div>
+    </div>
+    <div class="content-right">
+        <h2>产品资料查询</h2>
+        <form action="/chanpinchaxun" method="post" class="chaxun">
+            <p>
+                <label for="#">请选择查询的方式:(客户号/售后单号)</label>&nbsp;&nbsp;&nbsp;
+                <select name="selected_one">
+                    <option value="货物编号" selected="selected">货物编号</option>
+                    <option value="货物名称">货物名称</option>
+                    <option value="货物位点">货物位点</option>
+                    <option value="到货日期">到货日期</option>
+                    <option value="供应商号">供应商号</option>
+                </select>
+                <input class="long" type="text" name="query">
+                <input class="last" type="submit" value="查询" />
+                <span>查询结果:{{query_result}}</span>
+            </p>
+        </form>
+        <center>
+        <form action="/" method="post">
+        <h2>搜索结果展示</h2>
+        <table border="1px" width="400px">
+            <tr >
+                <th>货物编号</th>
+                <th>货物名称</th>
+                <th>规格</th>
+                <th>单价</th>
+                <th>数量</th>
+                <th>单位</th>
+                <th>入库签收员</th>
+            </tr>
+            {% for result in results %}
+            <tr >
+                <td>{{result[1]}}</td>
+                <td>{{result[2]}}</td>
+                <td>{{result[3]}}</td>
+                <td>{{result[4]}}</td>
+                <td>{{result[5]}}</td>
+                <td>{{result[6]}}</td>
+                <td>{{result[7]}}</td>
+            </tr>
+            {% endfor %}
+        </table>
+        </form>
+        </center>
+    </div>
+</div>
+</body>
+</html>
